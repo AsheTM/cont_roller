@@ -1,0 +1,30 @@
+{
+  "name": "@ashetm/cont_roller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel build.js -o ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs", 
+    "javascript", 
+    "express", 
+    "controller", 
+    "middleware"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "statuses": "^1.5.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-transform-object-assign": "^7.7.4",
+    "@babel/plugin-transform-spread": "^7.7.4",
+    "@babel/preset-env": "^7.7.6"
+  }
+}
