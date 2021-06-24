@@ -12,28 +12,42 @@ class Cont_Roller{
         this._payloadError          = { __error__: null };
         this._status                = 200;
         this._statusError           = 500;
+        /////////////////////////
+        ///// Experimentale /////
+        /////////////////////////
+        this._chain                 = [
+            // {
+            //     callback:   () => true, 
+            //     code:       200
+            // }
+        ];
+        /////////////////////////
+        /////////////////////////
+        /////////////////////////
         this._conditionalCallback   = () => true;
         this._mainCallback          = mainCallback;
         this._controller            = function(cont_roller) {
             return function(req, res, next) {
                 try {
                     let 
-                        options         = {
+                        options         = Object.seal({
                             __headers__ :       cont_roller._headers,     // Headers
                             __cookies__:        cont_roller._cookies,     // Array contains { name, value, options }
                             __contentType__:    cont_roller._contentType  // String
-                        };
-                    options = Object.seal(options)
-                    let data            = cont_roller._mainCallback(req, options), 
+                        }), 
+                        data            = cont_roller._mainCallback(req, options), 
                         ifGoesWrong     = cont_roller._conditionalCallback(req, data), 
                         responseData    = { ...data };
+                    
                     if(ifGoesWrong)
                         return res.status(cont_roller._statusError).send(cont_roller._payloadError);
+                    
                     responseData.__status__         = cont_roller._status;
-                    responseData.__contentType__    = options.__contentType__   ||  data.__contentType__        ||  data.contentType        ||  contentType;
-                    responseData.__headers__        = options.__headers__       ||  data.__headers__            ||  data.headers            ||  headers;
-                    responseData.__cookies__        = options.__cookies__       ||  data.__cookies__            ||  data.cookies            ||  cookies;
-                    responseData.__payload__        = data && data.__payload__  ||  data                        ||  cont_roller._payload    ||  null;
+                    responseData.__contentType__    = options.__contentType__   ||  data.__contentType__    ||  data.contentType        ||  contentType;
+                    responseData.__headers__        = options.__headers__       ||  data.__headers__        ||  data.headers            ||  headers;
+                    responseData.__cookies__        = options.__cookies__       ||  data.__cookies__        ||  data.cookies            ||  cookies;
+                    responseData.__payload__        = data && data.__payload__  ||  data                    ||  cont_roller._payload    ||  null;
+                    
                     prepareRes(res, responseData);
                     res.send(responseData.__payload__);
                 } catch(error) {
